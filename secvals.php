@@ -23,6 +23,10 @@
 // we could add a second parameter as to what's the required behaviour, 
 // force some default value or simly return false/null
 // obviously right now the later applies
+
+// also there should be an option for the unknown keys: should we keep or drop them?
+// will force drop for now - better to be paranoid :)
+
 function secure_vals($howtosecure = array()){
   global $_SPOST;
   global $_SGET;
@@ -36,13 +40,14 @@ function secure_vals($howtosecure = array()){
 
 // securevals originally was a part of bsg, the names kept for backward compatibility 
 function bsg_secure_value($key,$value) {
-   $value = preg_replace("/'/g","&apos;",$value); // i hate \' -s
-   $value = pg_escape_string($value);
+//   $value = preg_replace("/'/","&apos;",$value); // i hate \' -s
+//   $value = pg_escape_string($value);
    switch($key) {
      case "email"     : $value = ch_val_email($value); break;
      case "float"     : $value = ch_val_float($value); break;
      case "timestamp" : $value = ch_val_timestamp($value); break; 
      case "natural"   : $value = ch_val_natural($value); break;
+     default          : $value = NULL;
    }
    return $value;
 }
