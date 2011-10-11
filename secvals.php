@@ -27,6 +27,8 @@
 // also there should be an option for the unknown keys: should we keep or drop them?
 // will force drop for now - better to be paranoid :)
 
+// also: option for sql escape ? now its a forced s/'/&apos;/ at bsg secure value
+
 function secure_vals($howtosecure = array()){
   global $_SPOST;
   global $_SGET;
@@ -40,13 +42,14 @@ function secure_vals($howtosecure = array()){
 
 // securevals originally was a part of bsg, the names kept for backward compatibility 
 function bsg_secure_value($key,$value) {
-//   $value = preg_replace("/'/","&apos;",$value); // i hate \' -s
+   $value = preg_replace("/'/","&apos;",$value); // i hate \' -s
 //   $value = pg_escape_string($value);
    switch($key) {
      case "email"     : $value = ch_val_email($value); break;
      case "float"     : $value = ch_val_float($value); break;
      case "timestamp" : $value = ch_val_timestamp($value); break; 
      case "natural"   : $value = ch_val_natural($value); break;
+     case "numeric"   : $value = ch_val_numeric($value); break;
      default          : $value = NULL;
    }
    return $value;
@@ -70,6 +73,7 @@ function bsg_secure_array($howtosecure,$arr) {
 function ch_val_numeric($v) {
   if (strlen($v) < 1) return NULL;
   if (!is_numeric($v)) return FALSE;
+  return $v;
 }
 
 function ch_val_natural($v) {
