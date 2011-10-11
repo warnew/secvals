@@ -170,8 +170,7 @@ function validEmail($email)
             $isValid = false;
          }
       }
-      if ($isValid && !(checkdnsrr($domain,"MX") || 
- ↪checkdnsrr($domain,"A")))
+      if ($isValid && !(checkdnsrr($domain,"MX") || checkdnsrr($domain,"A")))
       {
          // domain not found in DNS
          $isValid = false;
