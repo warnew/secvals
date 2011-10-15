@@ -26,7 +26,7 @@
 
 // also: option for sql escape ? now its a forced s/'/&apos;/ at bsg secure value
 
-if (!defined('SECVALS_PARANOID') {
+if (!defined('SECVALS_PARANOID')) {
   define('SECVALS_PARANOID',true); // when true we'll drop the values of the unknown keys
 }
 
@@ -83,7 +83,7 @@ function ch_val_numeric($v) {
 
 function ch_val_natural($v) {
   // for natural numbers, eg. pagination.
-  $v = ch_val_2_numeric($v);
+  $v = ch_val_numeric($v);
   if ($v < 0) {
     return FALSE;
   }
@@ -91,8 +91,8 @@ function ch_val_natural($v) {
 }
 
 function ch_val_float($v) {
-  $v = ch_val_2_numeric($v);
   $v = preg_replace('#,#','.',$v); // in some languages we have decimal coma-s instead of decimal point-s
+  $v = ch_val_numeric($v);
   return $v;
 }
 
