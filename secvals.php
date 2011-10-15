@@ -25,6 +25,7 @@
 // obviously right now the later applies
 
 // also there should be an option for the unknown keys: should we keep or drop them?
+// right now we are dropping them
 
 // also: option for sql escape ? now its a forced s/'/&apos;/ at bsg secure value
 
@@ -40,16 +41,18 @@ function secure_vals($howtosecure = array()){
 }
 
 // securevals originally was a part of bsg, the names kept for backward compatibility 
-function bsg_secure_value($key,$value) {
+function bsg_secure_value($howto,$key,$value) {
    $value = preg_replace("/'/","&apos;",$value); // i hate \' -s
 //   $value = pg_escape_string($value);
-   switch($key) {
+   $how = $howto[$key];
+   switch($how) {
      case "email"     : $value = ch_val_email($value); break;
      case "float"     : $value = ch_val_float($value); break;
      case "timestamp" : $value = ch_val_timestamp($value); break; 
      case "natural"   : $value = ch_val_natural($value); break;
      case "numeric"   : $value = ch_val_numeric($value); break;
-     default          : $value = NULL;
+     case "any"       : $value = $value; break;
+     default          : $value = NULL; debug_append("unknown key: ".$key."\n"); // debug_append is a brow lib function
    }
    return $value;
 }
@@ -62,7 +65,7 @@ function bsg_secure_array($howtosecure,$arr) {
     if (is_array($value)) {
       $value = bsg_secure_array($howtosecure,$value);
     } else {
-      $value = bsg_secure_value($howtosecure[$key],$value);
+      $value = bsg_secure_value($howtosecure,$key,$value);
     }
     $rv[$key] = $value;
   }
