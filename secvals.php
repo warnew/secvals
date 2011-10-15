@@ -24,10 +24,11 @@
 // force some default value or simly return false/null
 // obviously right now the later applies
 
-// also there should be an option for the unknown keys: should we keep or drop them?
-// right now we are dropping them
-
 // also: option for sql escape ? now its a forced s/'/&apos;/ at bsg secure value
+
+if (!defined('SECVALS_PARANOID') {
+  define('SECVALS_PARANOID',true); // when true we'll drop the values of the unknown keys
+}
 
 function secure_vals($howtosecure = array()){
   global $_SPOST;
@@ -45,6 +46,9 @@ function bsg_secure_value($howto,$key,$value) {
    $value = preg_replace("/'/","&apos;",$value); // i hate \' -s
 //   $value = pg_escape_string($value);
    $how = $howto[$key];
+   if (SECVALS_PARANOID && empty($how)) {
+     return NULL; debug_append("unknown key: ".$key."\n"); // debug_append is a brow lib function
+   }
    switch($how) {
      case "email"     : $value = ch_val_email($value); break;
      case "float"     : $value = ch_val_float($value); break;
@@ -52,7 +56,6 @@ function bsg_secure_value($howto,$key,$value) {
      case "natural"   : $value = ch_val_natural($value); break;
      case "numeric"   : $value = ch_val_numeric($value); break;
      case "any"       : $value = $value; break;
-     default          : $value = NULL; debug_append("unknown key: ".$key."\n"); // debug_append is a brow lib function
    }
    return $value;
 }
