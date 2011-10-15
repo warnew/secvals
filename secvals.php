@@ -25,7 +25,6 @@
 // obviously right now the later applies
 
 // also there should be an option for the unknown keys: should we keep or drop them?
-// will force drop for now - better to be paranoid :)
 
 // also: option for sql escape ? now its a forced s/'/&apos;/ at bsg secure value
 
@@ -36,7 +35,7 @@ function secure_vals($howtosecure = array()){
     $_SPOST = bsg_secure_array($howtosecure,$_POST);
   }
   if ($howtosecure && $_GET) {
-    $_SGET = bsg_secure_array($_GET);
+    $_SGET = bsg_secure_array($howtosecure,$_GET);
   }
 }
 
