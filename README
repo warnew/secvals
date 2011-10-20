@@ -1,8 +1,8 @@
-This is secvals,
+#This is secvals,#
 
 a way to secure the data given by the user in PHP.
 
-Usage: 
+##Usage:##
 
 At the beginning of every PHP file you should include secvals.php, and call
 
@@ -11,11 +11,8 @@ secure_vals(array(
    'key2' => 'type'
 ));
 
-where the key is the variable's key in $_POST or $_GET and the type is one of: 
-float, email, timestamp.
+Where the key is the variable's key in $_POST or $_GET and the type is one of the supported types (eg. float, email, timestamp).
 
-The function will create a $_SGET and $_SPOST with the secure and validated data. Use them!
-
-
+The function will create a $_SGET and $_SPOST with the secure and validated data. Use them instead of $_GET || $_POST!
 
 Original author: Zoltan LENGYEL - @warnew on twitter
