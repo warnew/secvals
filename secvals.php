@@ -45,9 +45,12 @@ function secure_vals($howtosecure = array()){
 function bsg_secure_value($howto,$key,$value) {
    $value = preg_replace("/'/","&apos;",$value); // i hate \' -s
 //   $value = pg_escape_string($value);
-   $how = $howto[$key];
-   if (SECVALS_PARANOID && empty($how)) {
+   if (isset($howto[$key])) {
+    $how = $howto[$key];
+   } else if (SECVALS_PARANOID) {
      return NULL; debug_append("unknown key: ".$key."\n"); // debug_append is a brow lib function
+   } else {
+     $how = 'any';
    }
    switch($how) {
      case "email"     : $value = ch_val_email($value); break;
